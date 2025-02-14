@@ -35,17 +35,15 @@ A 2-space indent can feel cramped, especially in deeply nested code. For example
 
 ```javascript
 // 2-space indent
-// [!code highlight:3]
 function calculateScore() {
-   if (user.isActive) {
-      let score = user.points * 10;
-      if (score > 100) {
-         return "Gold"; // [!code --]
-         return "Plat"; // [!code ++]
-      } else {
-         return "Silver";
-      }
-   }
+  if (user.isActive) {
+    let score = user.points * 10;
+    if (score > 100) {
+      return "Plat"; 
+    } else {
+      return "Silver";
+    }
+  }
 }
 ```
 
@@ -54,14 +52,14 @@ With 2 spaces, the hierarchy blurs. **4 spaces fix this**, but they eat horizont
 ```javascript
 // 4-space indent (prepare to scroll right...)
 function calculateScore() {
-   if (user.isActive) {
-      let score = user.points * 10;
-      if (score > 100) {
-         return "Gold";
-      } else {
-         return "Silver";
-      }
-   }
+    if (user.isActive) {
+        let score = user.points * 10;
+        if (score > 100) {
+            return "Gold";
+        } else {
+            return "Silver";
+        }
+    }
 }
 ```
 
