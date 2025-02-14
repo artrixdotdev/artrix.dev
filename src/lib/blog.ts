@@ -9,6 +9,13 @@ type Metadata = {
    tags?: string[];
 };
 
+type BlogPost = {
+   metadata: Metadata;
+   slug: string;
+   content: string;
+   readTime: string;
+};
+
 function parseFrontmatter(fileContent: string) {
    let frontmatterRegex = /---\s*([\s\S]*?)\s*---/;
    let match = frontmatterRegex.exec(fileContent);
@@ -30,20 +37,52 @@ function parseFrontmatter(fileContent: string) {
    return { metadata: metadata as Metadata, content };
 }
 
-function getMDXFiles(dir: string) {
-   return fs.readdirSync(dir).filter((file) => path.extname(file) === ".mdx");
+function findMDXFiles(dir: string): string[] {
+   const entries = fs.readdirSync(dir, { withFileTypes: true });
+   let files: string[] = [];
+
+   for (const entry of entries) {
+      const fullPath = path.join(dir, entry.name);
+
+      if (entry.isDirectory()) {
+         // Recursively search subdirectories
+         files = files.concat(findMDXFiles(fullPath));
+      } else if (entry.isFile() && /\.(mdx?|markdown)$/.test(entry.name)) {
+         files.push(fullPath);
+      }
+   }
+
+   return files;
 }
 
-function readMDXFile(filePath: string) {
+function getSlugFromPath(filePath: string, baseDir: string): string {
+   // Remove base directory and file extension
+   const relativePath = path.relative(baseDir, filePath);
+   const slugPath = relativePath.replace(/\.(mdx?|markdown)$/, "");
+
+   // Handle both directory/article.mdx and directory.mdx patterns
+   if (slugPath.endsWith("/article")) {
+      return path.dirname(slugPath);
+   }
+
+   return slugPath;
+}
+
+function readMDXFile(filePath: string): {
+   metadata: Metadata;
+   content: string;
+} {
    let rawContent = fs.readFileSync(filePath, "utf-8");
    return parseFrontmatter(rawContent);
 }
 
-function getMDXData(dir: string) {
-   let mdxFiles = getMDXFiles(dir);
-   return mdxFiles.map((file) => {
-      let { metadata, content } = readMDXFile(path.join(dir, file));
-      let slug = path.basename(file, path.extname(file));
+function getMDXData(dir: string): BlogPost[] {
+   const baseDir = path.resolve(dir);
+   const mdxFiles = findMDXFiles(baseDir);
+
+   return mdxFiles.map((filePath) => {
+      const { metadata, content } = readMDXFile(filePath);
+      const slug = getSlugFromPath(filePath, baseDir);
 
       return {
          metadata,
@@ -54,23 +93,22 @@ function getMDXData(dir: string) {
    });
 }
 
-export function getBlogPosts() {
-   return getMDXData(path.join(process.cwd(), "src", "app", "blog", "posts"));
+export function getBlogPosts(): BlogPost[] {
+   const postsDir = path.join(process.cwd(), "src", "app", "blog", "posts");
+   return getMDXData(postsDir);
 }
 
-export function formatDate(date: string, includeRelative = false) {
+export function formatDate(date: string, includeRelative = false): string {
    let currentDate = new Date();
    if (!date.includes("T")) {
       date = `${date}T00:00:00`;
    }
    let targetDate = new Date(date);
-
    let yearsAgo = currentDate.getFullYear() - targetDate.getFullYear();
    let monthsAgo = currentDate.getMonth() - targetDate.getMonth();
    let daysAgo = currentDate.getDate() - targetDate.getDate();
 
    let formattedDate = "";
-
    if (yearsAgo > 0) {
       formattedDate = `${yearsAgo}y ago`;
    } else if (monthsAgo > 0) {
@@ -90,15 +128,9 @@ export function formatDate(date: string, includeRelative = false) {
    if (!includeRelative) {
       return fullDate;
    }
-
    return `${fullDate} (${formattedDate})`;
 }
-/**
- * Read time in minutes, hours, or seconds
- */
-/**
- * Read time in minutes, hours, or seconds
- */
+
 export function readTime(content: string): string {
    let words = content.replace(/[^a-zA-Z0-9\s]/g, "").split(/\s+/);
    let time = 0;
