@@ -12,6 +12,9 @@ const nextConfig = {
    reactStrictMode: true,
    transpilePackages: ["three"],
    pageExtensions: ["md", "mdx", "tsx", "ts", "jsx", "js"],
+   images: {
+      remotePatterns: [{ hostname: "www.shuttle.dev", protocol: "https" }],
+   },
 };
 
 plugins.push(
