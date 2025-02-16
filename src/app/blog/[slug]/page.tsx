@@ -6,6 +6,7 @@ import { Clock } from "lucide-react";
 import { Avatar, Chip } from "@heroui/react";
 import Image from "next/image";
 import Link from "next/link";
+import TagChip from "@/components/blog/tag-chip";
 
 export async function generateStaticParams() {
    let posts = getBlogPosts();
@@ -117,16 +118,14 @@ export default async function Blog({ params }: { params: { slug: string } }) {
             {post.metadata.tags && (
                <ul className="flex gap-2 items-center">
                   {post.metadata.tags.slice(0, 3).map((tag) => (
-                     <Chip
+                     <TagChip
+                        tag={tag}
                         key={tag}
                         as={Link}
                         size="sm"
-                        color="primary"
-                        variant="flat"
+                        //@ts-ignore
                         href={`/blog?tags=${tag}`}
-                     >
-                        {tag}
-                     </Chip>
+                     />
                   ))}
                   {post.metadata.tags.length > 3 && (
                      <Chip
