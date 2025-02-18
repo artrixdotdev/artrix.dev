@@ -50,7 +50,7 @@ export async function CodeBlock({
          pre: ({ className, ...props }) => (
             <div className="relative flex flex-col border bg-transparent border-default mb-8 shadow-xl rounded-lg">
                {/* Top bar */}
-               <div className="flex items-center pl-6 justify-between bg-content2 text-content2-foreground rounded-t-lg border-b border-default-300 w-full h-12">
+               <div className="flex absolute inset-0 items-center pl-6 justify-between text-content2-foreground rounded-t-lg border-default-300 w-full h-12">
                   <div className="flex items-center gap-2">
                      <span className="bg-danger-500 rounded-full w-4 h-4" />
                      <span className="bg-warning-500 rounded-full w-4 h-4" />
@@ -72,7 +72,7 @@ export async function CodeBlock({
                <pre
                   className={cn(
                      className,
-                     "w-full transition-colors overflow-x-auto p-6 rounded-b-lg",
+                     "w-full pt-12 pb-6 px-6 transition-colors overflow-x-auto rounded-b-lg",
                   )}
                   {...props}
                />
