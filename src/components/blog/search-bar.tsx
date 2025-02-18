@@ -37,7 +37,7 @@ export default function SearchBar({
             <Button type="submit">Search</Button>
          </form>
          {tags.length > 0 && (
-            <div className="flex gap-2 mt-6">
+            <div className="flex flex-wrap gap-2 mt-6">
                {tags.map((tag) => (
                   <TagChip key={tag} tag={tag} onClose={() => removeTag(tag)} />
                ))}
