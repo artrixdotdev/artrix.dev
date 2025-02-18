@@ -1,49 +1,61 @@
 import { type ManifestConfig, generateManifest } from "material-icon-theme";
+import { cache } from "react";
+import { cn } from "@heroui/react";
 
-type IconImport = { src: string };
-export const CodeIcon: React.FC<{ filename: string | null }> = async ({
-   filename,
-}) => {
-   if (!filename) return null;
+// Cache the manifest generation
+const getManifest = cache(() => {
    const config: ManifestConfig = {};
-   const manifest = generateManifest(config);
-   if (!manifest) return null;
-   let icons: [IconImport, IconImport | null] | null = null;
+   return generateManifest(config);
+});
 
-   if (filename && manifest.fileNames && manifest.fileNames[filename]) {
-      const image = manifest.fileNames[filename];
-      const imageLight = manifest.light?.fileNames?.[filename];
-
-      icons = await Promise.all([
-         (await import(`material-icon-theme/icons/${image}.svg`).then(
-            (mod) => mod.default,
-         )) as Promise<IconImport>,
-         (imageLight
-            ? await import(`material-icon-theme/icons/${imageLight}.svg`).then(
-                 (mod) => mod.default,
-              )
-            : async () => null) as Promise<IconImport | null>,
-      ]);
-   } else {
+// Cache the icon loading
+const loadIcon = cache(async (iconPath: string) => {
+   try {
+      // Using require instead of dynamic import for server-side
+      const icon = require(`material-icon-theme/icons/${iconPath}.svg`);
+      return icon.default || icon;
+   } catch (error) {
       return null;
    }
+});
 
-   if (!icons) return null;
-   let [darkIcon, lightIcon] = icons;
+export async function CodeIcon({
+   filename,
+}: {
+   filename: string | null;
+}): Promise<JSX.Element | null> {
+   if (!filename) return null;
+
+   const manifest = getManifest();
+   if (!manifest) return null;
+
+   const darkIconName = manifest.fileNames?.[filename];
+   const lightIconName = manifest.light?.fileNames?.[filename];
+
+   if (!darkIconName) return null;
+
+   const [darkIcon, lightIcon] = await Promise.all([
+      darkIconName ? loadIcon(darkIconName) : Promise.resolve(null),
+      lightIconName ? loadIcon(lightIconName) : Promise.resolve(null),
+   ]);
+
+   if (!darkIcon && !lightIcon) return null;
+
    return (
-      <picture>
-         {lightIcon && (
-            <img
-               src={lightIcon.src}
-               className="w-6 h-6 dark:hidden"
-               alt={filename ?? "unknown" + " file icon light"}
-            />
-         )}
+      <div className="relative w-6 h-6">
+         <img
+            src={lightIcon?.src ?? darkIcon.src}
+            alt={`${filename} file icon light`}
+            className={cn("w-6 h-6", lightIcon ? "dark:hidden" : "block")}
+         />
          <img
             src={darkIcon.src}
-            alt={filename ?? "unknown" + " file icon"}
-            className="w-6 h-6 hidden dark:block"
+            alt={`${filename} file icon`}
+            className={cn(
+               "w-6 h-6",
+               lightIcon ? "hidden dark:block" : "hidden",
+            )}
          />
-      </picture>
+      </div>
    );
-};
+}
