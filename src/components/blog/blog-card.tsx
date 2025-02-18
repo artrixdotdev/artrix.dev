@@ -92,7 +92,7 @@ export default function Card({
 
             <CardFooter className="flex justify-between items-center pt-4">
                <motion.span
-                  className="text-sm inline-flex justify-start items-center gap-1 text-default-500"
+                  className="inline-flex justify-start items-center gap-1 text-default-500"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.7 }}
