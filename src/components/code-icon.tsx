@@ -1,5 +1,5 @@
 import { type ManifestConfig, generateManifest } from "material-icon-theme";
-import { cache } from "react";
+import { cache, JSX } from "react";
 import { cn } from "@heroui/react";
 
 // Cache the manifest generation
