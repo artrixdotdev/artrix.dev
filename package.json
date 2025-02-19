@@ -14,7 +14,7 @@
     "tabWidth": 3
   },
   "dependencies": {
-    "@heroui/react": "0.0.0-canary-20250205213151",
+    "@heroui/react": "2.7.2",
     "@icons-pack/react-simple-icons": "^11.1.0",
     "@mdx-js/loader": "^3.1.0",
     "@mdx-js/react": "^3.1.0",
