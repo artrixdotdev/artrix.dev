@@ -1,4 +1,8 @@
-import { type ManifestConfig, generateManifest } from "material-icon-theme";
+import {
+   Manifest,
+   type ManifestConfig,
+   generateManifest,
+} from "material-icon-theme";
 import { cache, JSX } from "react";
 import { cn } from "@heroui/react";
 
@@ -19,6 +23,25 @@ const loadIcon = cache(async (iconPath: string) => {
    }
 });
 
+const getIconName = cache(
+   (_filename: string, _manifest: Manifest, light = false) => {
+      const manifest = light ? _manifest.light! : _manifest;
+      const filename =
+         _filename in manifest.languageIds!
+            ? manifest.languageIds![_filename]
+            : _filename;
+
+      const fileExtension = filename.split(".").pop();
+      if (fileExtension && fileExtension in manifest.fileExtensions!) {
+         return manifest.fileExtensions![fileExtension];
+      }
+      if (filename in manifest.fileNames!) {
+         return manifest.fileNames![filename];
+      }
+      return "";
+   },
+);
+
 export async function CodeIcon({
    filename,
 }: {
@@ -27,11 +50,12 @@ export async function CodeIcon({
    if (!filename) return null;
 
    const manifest = getManifest();
+   console.log(manifest.languageIds);
    if (!manifest) return null;
 
-   const darkIconName = manifest.fileNames?.[filename];
-   const lightIconName = manifest.light?.fileNames?.[filename];
-
+   const darkIconName = getIconName(filename, manifest);
+   const lightIconName = getIconName(filename, manifest, true);
+   console.log(darkIconName);
    if (!darkIconName) return null;
 
    const [darkIcon, lightIcon] = await Promise.all([

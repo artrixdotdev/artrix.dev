@@ -57,7 +57,7 @@ export async function CodeBlock({
                      <span className="bg-success-500 rounded-full w-4 h-4" />
                   </div>
                   <span className="text-sm inline-flex font-semibold items-center justify-center gap-2 text-foreground-400">
-                     <CodeIcon filename={filename} />
+                     <CodeIcon filename={filename || lang} />
                      {filename || lang}
                   </span>
                   <CopyCode
