@@ -18,7 +18,7 @@
     "@icons-pack/react-simple-icons": "^11.1.0",
     "@mdx-js/loader": "^3.1.0",
     "@mdx-js/react": "^3.1.0",
-    "@next/mdx": "^15.2.0-canary.52",
+    "@next/mdx": "^15.2.0-canary.65",
     "@octokit/request": "^9.2.0",
     "@react-aria/ssr": "3.9.7",
     "@react-aria/visually-hidden": "3.8.19",
@@ -34,7 +34,7 @@
     "lucide-react": "^0.474.0",
     "material-icon-theme": "^5.19.0",
     "mini-svg-data-uri": "^1.4.4",
-    "next": "^15.2.0-canary.52",
+    "next": "^15.2.0-canary.65",
     "next-mdx-remote": "^5.0.0",
     "next-themes": "^0.4.4",
     "react": "19.0.0",
@@ -48,7 +48,7 @@
     "zustand": "^5.0.3"
   },
   "devDependencies": {
-    "@next/eslint-plugin-next": "^15.2.0-canary.52",
+    "@next/eslint-plugin-next": "^15.2.0-canary.65",
     "@react-types/shared": "3.27.0",
     "@shikijs/transformers": "^2.3.2",
     "@types/node": "22.10.7",
