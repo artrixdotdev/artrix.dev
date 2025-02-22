@@ -1,6 +1,6 @@
 "use client";
 import { SITE_CONFIG } from "@/config/site";
-import { Switch } from "@heroui/react";
+import { addToast, Switch } from "@heroui/react";
 import { Link } from "@heroui/react";
 import { GithubIcon, LogoText, MoonIcon, SunIcon } from "@/components/icons";
 import { SiDiscord as DiscordIcon } from "@icons-pack/react-simple-icons";
@@ -11,7 +11,6 @@ export function Footer() {
    const { setTheme, resolvedTheme: theme } = useTheme();
    console.log(theme);
    const socials = SITE_CONFIG.links;
-
    return (
       <footer id="footer" className="container mx-auto px-4 py-10">
          <div className="flex flex-col space-y-6">
@@ -22,11 +21,15 @@ export function Footer() {
                <div className="flex space-x-4">
                   <button
                      className={link({ color: "foreground" })}
-                     onMouseDown={() =>
+                     onMouseDown={() => {
                         navigator.clipboard.writeText(
                            SITE_CONFIG.handles.discord,
-                        )
-                     }
+                        );
+                        addToast({
+                           title: "Copied to clipboard",
+                           color: "success",
+                        });
+                     }}
                   >
                      <DiscordIcon className="h-6 w-6" />
                   </button>

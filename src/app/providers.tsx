@@ -3,7 +3,7 @@
 import type { ThemeProviderProps } from "next-themes";
 
 import * as React from "react";
-import { HeroUIProvider } from "@heroui/react";
+import { HeroUIProvider, ToastProvider } from "@heroui/react";
 import { useRouter } from "next/navigation";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 
@@ -30,6 +30,7 @@ export function Providers({ children, themeProps }: ProvidersProps) {
             attribute="data-theme"
             {...themeProps}
          >
+            <ToastProvider placement="top-center" toastOffset={28} />
             {children}
          </NextThemesProvider>
       </HeroUIProvider>
