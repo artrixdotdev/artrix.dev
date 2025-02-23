@@ -5,6 +5,7 @@ import { GithubContributionsGraph } from "@/components/activity/github-graphs";
 import { Button } from "@heroui/react";
 import { BentoBox, BentoGrid, BentoSizes } from "@/components/bento";
 import { DiscordBento } from "@/components/activity/boxes/discord";
+import { Suspense } from "react";
 
 export default async function AboutPage() {
    const bentos = [DiscordBento];
@@ -21,9 +22,9 @@ export default async function AboutPage() {
             items={bentos.map(([_, { label }]) => label)}
             className="min-h-screen"
          >
-            <BentoBox size="compact" id="discord">
-               Hi
-            </BentoBox>
+            {bentos.map(([Bento, { label }]) => (
+               <Bento key={label} />
+            ))}
          </BentoGrid>
       </Section>
    );
