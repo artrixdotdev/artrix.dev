@@ -126,7 +126,7 @@ export const BentoGrid = React.forwardRef<HTMLUListElement, BentoGridProps>(
             )}
             style={
                {
-                  "--cell-size": "min(15vw, 128px)",
+                  "--cell-size": "min(15vw, 156px)",
                   gridAutoFlow: "row",
                } as React.CSSProperties
             }
