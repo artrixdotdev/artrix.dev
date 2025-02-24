@@ -1,15 +1,21 @@
+"use client";
 import { getContributions } from "@/lib/github";
 import { title } from "@/components/primitives";
 import { Section } from "@/components/section";
 import { GithubContributionsGraph } from "@/components/activity/github-graphs";
 import { Button } from "@heroui/react";
 import { BentoBox, BentoGrid, BentoSizes } from "@/components/bento";
-import { DiscordBento } from "@/components/activity/boxes/discord";
-import { Suspense } from "react";
+import {
+   Bento as DiscordBento,
+   label as discordLabel,
+   size as discordSize,
+} from "@/components/activity/boxes/discord";
+import { BoxType } from "@/components/activity/boxes";
 
-export default async function AboutPage() {
-   const bentos = [DiscordBento];
-   console.log(bentos.map(([Bento, { label }]) => <Bento key={label} />));
+export default function AboutPage() {
+   const bentos = [
+      [DiscordBento, { label: discordLabel, size: discordSize }],
+   ] as BoxType[];
    return (
       <Section
          id="activity"
@@ -22,9 +28,9 @@ export default async function AboutPage() {
             items={bentos.map(([_, { label }]) => label)}
             className="min-h-screen"
          >
-            {bentos.map(([Bento, { label }]) => (
-               <Bento key={label} />
-            ))}
+            {bentos.map(([Bento, { label }]) => {
+               return <Bento key={label} />;
+            })}
          </BentoGrid>
       </Section>
    );

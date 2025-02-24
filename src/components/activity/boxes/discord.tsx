@@ -1,15 +1,24 @@
+"use client";
 import { BentoBox, BentoSizes } from "@/components/bento";
 import { SiDiscord } from "@icons-pack/react-simple-icons";
 import { type BoxType } from ".";
 import { SOCIAL_HANDLES } from "@/config/site";
+import { addToast } from "@heroui/react";
 
-const label = "discord";
-const size: BentoSizes = "compact";
+export const label = "discord";
+export const size: BentoSizes = "tall";
 
-const Bento = () => {
+export const Bento = () => {
    return (
       <BentoBox
-         className="p-6 flex items-center gap-2 justify-center flex-col"
+         onClick={() => {
+            navigator.clipboard.writeText(SOCIAL_HANDLES.discord);
+            addToast({
+               title: "Copied to clipboard",
+               color: "success",
+            });
+         }}
+         className="p-6 flex items-center gap-2 justify-center cursor-pointer flex-col"
          id={label}
          size={size}
       >
@@ -18,5 +27,3 @@ const Bento = () => {
       </BentoBox>
    );
 };
-
-export const DiscordBento = [Bento, { label, size }] as BoxType;
